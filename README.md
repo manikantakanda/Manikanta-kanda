@@ -3,32 +3,67 @@
 This is a simple web application developed as part of a Full Stack Internship assignment.  
 It allows citizens to apply for an LPG connection under the **Pradhan Mantri Ujjwala Yojana (PMUY)** scheme.
 
-## 🔍 Features
+<!DOCTYPE html>
+<html>
+<head>
+  <title>PMUY Application</title>
+  <link rel="stylesheet" href="styles.css" />
+</head>
+<body>
+  <div class="container">
+    <h1>PMUY Application Form</h1>
+    <form id="appForm">
+      <label>Aadhaar Number:</label>
+      <input type="text" id="aadhaar" required /><br />
 
-- Citizens can apply for an LPG connection using their Aadhar number
-- Based on income, subsidy percentage is calculated:
-  - Nil income – 50%
-  - Up to ₹25,000 – 40%
-  - Up to ₹50,000 – 30%
-  - Up to ₹75,000 – 20%
-  - Up to ₹1,00,000 – 10%
-- After applying:
-  - If **approved**, it shows:
-    - Expected connection setup date
-    - Concerned officer info
-    - Subsidy amount
-  - If **rejected**, it shows the reason
+      <label>Full Name:</label>
+      <input type="text" id="name" required /><br />
 
-## 🧪 How to Run
+      <label>Annual Income (₹):</label>
+      <input type="number" id="income" required /><br />
 
-1. Download or clone this repository  
-2. Open the file `apply.html` in any browser (Chrome/Edge/Firefox)  
-3. Fill the form and submit to see your subsidy eligibility
+      <button type="submit">Apply</button>
+    </form>
 
-## 🛠️ Tech Stack
+    <div id="result" class="output"></div>
+  </div>
 
-- **Frontend:** HTML5, CSS3, JavaScript (no frameworks)
-- **Backend:** Not implemented (prototype only)
-- **Database:** Mocked using simple JSON (future scope)
+  <script>
+    const form = document.getElementById("appForm");
+    const result = document.getElementById("result");
+
+    form.addEventListener("submit", function (e) {
+      e.preventDefault();
+      const aadhaar = document.getElementById("aadhaar").value.trim();
+      const income = parseInt(document.getElementById("income").value.trim());
+
+      let subsidy = 0;
+      let message = "";
+
+      if (!aadhaar || isNaN(income)) {
+        result.innerHTML = "Please fill all details.";
+        return;
+      }
+
+      if (income > 100000) {
+        message = "❌ You are not eligible (Income > 1 Lakh)";
+      } else {
+        if (income === 0) subsidy = 50;
+        else if (income <= 25000) subsidy = 40;
+        else if (income <= 50000) subsidy = 30;
+        else if (income <= 75000) subsidy = 20;
+        else subsidy = 10;
+
+        message = `✅ Application submitted!<br>
+        Subsidy Eligible: <b>${subsidy}%</b><br>
+        Expected Connection Date: <b>Within 7 days</b><br>
+        Officer: <b>Ravi Kumar, District Officer</b>`;
+      }
+
+      result.innerHTML = message;
+    });
+  </script>
+</body>
+</html>
 
 
